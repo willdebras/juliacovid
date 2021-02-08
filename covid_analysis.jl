@@ -18,7 +18,7 @@ countries = collect(covid_data[:, 2])
 
 unique_countries = unique(countries)
 
-@manipulate for i in 1:length(countries)
+@manipulate for i = 1:length(countries)
     covid_data[i, 1:5]
 end
 
@@ -35,7 +35,7 @@ covid_data[u_countries, :]
 
 countries .== "US"
 
-us_index = findfirst(countries .=="US")
+us_index = findfirst(countries .== "US")
 
 us_data_row = covid_data[us_index, :]
 
@@ -61,8 +61,15 @@ format = Dates.DateFormat("m/d/Y")
 
 dates = parse.(Date, date_strings, format) + Year(2000)
 
-plot(dates, us_data, xticks = dates[1:31:end],
-    xrotation = 45, leg=:topleft, label = "US data", uscale = log10)
+plot(
+    dates,
+    us_data,
+    xticks = dates[1:31:end],
+    xrotation = 45,
+    leg = :topleft,
+    label = "US data",
+    uscale = log10,
+)
 
 xlabel!("date")
 ylabel!("confirmed cases in U.S. (log)")
