@@ -76,6 +76,87 @@ count(abs_data .< 2mean(abs_data)) / length(abs_data)
 
 #more robust is mean of squared error
 
-squared_data = data.^2
+m = mean(data)
+
+squared_data = (data.-m).^2
 
 scatter(squared_data, alpha = 0.5)
+
+variance = mean((data .-m).^2)
+
+σ = √(variance) #\sigma \sqrt
+
+count(m - σ .< data .< (m + σ))
+
+# can instead do array comprehension
+
+#71 percent within 1 standard deviationl
+count([m - σ < x < (m + σ) for x in data]) / length(data)
+
+scatter(data, alpha = 0.2)
+
+using Statistics
+
+#standard deviation of mean
+std(data)
+
+
+# generic random walk function that works with discrete and continuous distributions
+#can pass function as argument
+function walk(N, jump)
+
+    x = 0
+    for i in 1:N
+        x += jump()
+    end
+
+    return x
+end
+
+discrete_jump() = rand((-1,+1))
+continuous_jump() = randn()
+
+# pass one of these two functioins as an argument
+walk(10, continuous_jump)
+
+#user defined/custom types -- composite types in Julia
+#struct creates an immutable though
+
+struct MyDisreteRandomWalker
+    x::Int # type annotation: x is of type Integer
+end
+
+# box with random data inside
+# to make an object of this type call a function of the struct
+
+w = MyDisreteRandomWalker(10)
+
+w.x # variable that lives inside the object w
+
+#here we can create a mutable structure
+mutable struct MyDisreteRandomWalker2
+    x::Int
+end
+
+function jump!(w::MyDisreteRandomWalker2)
+    w.x += rand((-1, +1))
+    return w
+end
+
+w = MyDisreteRandomWalker2(10)
+
+jump!(w)
+
+function walk!(w, N)
+
+    for i in 1:N
+        jump!(w)
+    end
+
+end
+
+# outer constructor, outside the type
+# creating a new method of this function
+MyDisreteRandomWalker2() = MyDisreteRandomWalker2(0)
+
+w = MyDisreteRandomWalker2()
