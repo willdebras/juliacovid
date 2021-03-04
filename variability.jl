@@ -147,7 +147,7 @@ w = MyDisreteRandomWalker2(10)
 
 jump!(w)
 
-function walk!(w, N)
+function walk!(w::MyDisreteRandomWalker2, N)
 
     for i in 1:N
         jump!(w)
@@ -160,3 +160,4 @@ end
 MyDisreteRandomWalker2() = MyDisreteRandomWalker2(0)
 
 w = MyDisreteRandomWalker2()
+w.x
